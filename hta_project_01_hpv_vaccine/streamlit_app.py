@@ -42,12 +42,20 @@ st.markdown("""
 def load_data():
     """Load all necessary data for the dashboard"""
     try:
-        with open('output/results.json', 'r') as f:
+        # Use pathlib for robust path handling
+        import pathlib
+        current_dir = pathlib.Path(__file__).parent
+
+        results_path = current_dir / 'output' / 'results.json'
+        data_path = current_dir / 'data' / 'extracted_data.csv'
+        manuscript_path = current_dir / 'output' / 'final_manuscript.md'
+
+        with open(results_path, 'r') as f:
             results = json.load(f)
 
-        data_df = pd.read_csv('data/extracted_data.csv')
+        data_df = pd.read_csv(data_path)
 
-        with open('output/final_manuscript.md', 'r') as f:
+        with open(manuscript_path, 'r') as f:
             manuscript = f.read()
 
         return results, data_df, manuscript
@@ -127,11 +135,7 @@ def main():
 
         with col1:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            if isinstance(-24639.67, str):
-                st.metric("ICER", "-24639.67", "Cost-Saving")
-            else:
-                icer_formatted = f"₹-24,640/QALY"
-                st.metric("ICER", icer_formatted, "Cost-Saving")
+            st.metric("ICER", "₹-24,639/QALY", "Cost-Saving")
             st.markdown('</div>', unsafe_allow_html=True)
 
         with col2:
